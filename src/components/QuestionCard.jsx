@@ -2,10 +2,7 @@ export default function QuestionCard({ question, index, total, selected, onSelec
   const isCorrect = selected === question.answer;
   const optionLabels = ["A", "B", "C", "D", "E"];
   return (
-    <div style={{
-      background: "#0d1f35", borderRadius: 16, padding: "28px 24px",
-      border: "1px solid #1a3a5c", marginBottom: 16,
-    }}>
+    <div className="question-card fade-in" role="region" aria-label={`Questão ${index + 1} de ${total}`}>
       <div style={{
         display: "flex", justifyContent: "space-between", alignItems: "center",
         marginBottom: 16,
@@ -18,7 +15,7 @@ export default function QuestionCard({ question, index, total, selected, onSelec
         }}>
           {type === "PS" ? "Problem Solving" : type === "DS" ? "Data Sufficiency" : "Critical Reasoning"}
         </span>
-        <span style={{ color: "#5a7a9a", fontSize: 13 }}>
+        <span style={{ color: "#5a7a9a", fontSize: 13 }} aria-hidden="true">
           Questão {index + 1} de {total}
         </span>
       </div>
@@ -28,7 +25,7 @@ export default function QuestionCard({ question, index, total, selected, onSelec
       }}>
         {question.q}
       </p>
-      <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+      <div role="radiogroup" aria-label="Alternativas" style={{ display: "flex", flexDirection: "column", gap: 8 }}>
         {question.options.map((opt, i) => {
           let bg = "#0a1628";
           let border = "#1a3a5c";
@@ -40,14 +37,19 @@ export default function QuestionCard({ question, index, total, selected, onSelec
             bg = "#0a2a4e"; border = "#00c2ff"; color = "#e8f0f8";
           }
           return (
-            <button key={i} onClick={() => !showResult && onSelect(i)} style={{
+            <button key={i} onClick={() => !showResult && onSelect(i)}
+              className="btn-option" data-locked={showResult ? "true" : "false"}
+              role="radio" aria-checked={i === selected}
+              aria-label={`Alternativa ${optionLabels[i]}: ${opt}`}
+              aria-disabled={showResult}
+              style={{
               display: "flex", alignItems: "flex-start", gap: 12,
               background: bg, border: `1.5px solid ${border}`,
               borderRadius: 10, padding: "12px 16px", cursor: showResult ? "default" : "pointer",
-              transition: "all 0.2s", textAlign: "left", width: "100%",
+              textAlign: "left", width: "100%",
               color, fontSize: 14, lineHeight: 1.6,
             }}>
-              <span style={{
+              <span aria-hidden="true" style={{
                 fontWeight: 700, fontSize: 13, minWidth: 24, height: 24,
                 display: "flex", alignItems: "center", justifyContent: "center",
                 borderRadius: 6, background: i === selected ? (showResult ? (i === question.answer ? "#00cc66" : "#cc3333") : "#00c2ff") : "#1a2a40",
@@ -62,7 +64,7 @@ export default function QuestionCard({ question, index, total, selected, onSelec
         })}
       </div>
       {showResult && (
-        <div style={{
+        <div role="alert" style={{
           marginTop: 16, padding: 16, borderRadius: 10,
           background: isCorrect ? "#0a2e1a" : "#1a0a0a",
           border: `1px solid ${isCorrect ? "#1a4a2a" : "#3a1a1a"}`,

@@ -10,10 +10,9 @@ export default function Results({ simuladoQuestions, simuladoAnswers, onBack }) 
   });
   const pct = Math.round((correct / total) * 100);
   return (
-    <div style={{ padding: "32px 20px", maxWidth: 700, margin: "0 auto" }}>
+    <div className="home-container fade-in">
       <div style={{ textAlign: "center", marginBottom: 32 }}>
-        <div style={{
-          fontSize: 64, fontWeight: 900,
+        <div className="score-number" style={{
           background: pct >= 70 ? "linear-gradient(135deg, #69f0ae, #00c2ff)" : pct >= 40 ? "linear-gradient(135deg, #ffab40, #ffd740)" : "linear-gradient(135deg, #ff5252, #ff8a80)",
           WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
         }}>
@@ -21,7 +20,7 @@ export default function Results({ simuladoQuestions, simuladoAnswers, onBack }) 
         </div>
         <div style={{ color: "#b0c8e0", fontSize: 16 }}>{correct} de {total} corretas</div>
       </div>
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12, marginBottom: 32 }}>
+      <div className="grid-3-results">
         {[
           { label: "Problem Solving", d: byType.PS, c: "#00c2ff" },
           { label: "Data Sufficiency", d: byType.DS, c: "#b388ff" },
@@ -47,7 +46,7 @@ export default function Results({ simuladoQuestions, simuladoAnswers, onBack }) 
           showResult={true} type={q.type}
         />
       ))}
-      <button onClick={onBack} style={{
+      <button onClick={onBack} className="btn-primary" style={{
         width: "100%", padding: 16, background: "#00c2ff", border: "none",
         borderRadius: 10, cursor: "pointer", fontSize: 14, fontWeight: 700, color: "#0a1628",
         marginTop: 16,

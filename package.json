@@ -1,8 +1,8 @@
 {
-  "name": "gmat-prep",
-  "version": "1.0.0",
+  "name": "quizsharp",
+  "version": "1.1.0",
   "private": true,
-  "description": "Preparatório GMAT - Teste de Lógica e Argumentação",
+  "description": "Pratique, aprenda e domine qualquer assunto com simulados interativos",
   "scripts": {
     "dev": "vite",
     "build": "vite build",

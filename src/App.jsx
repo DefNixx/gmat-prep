@@ -10,12 +10,33 @@ import Results from "./components/Results";
 
 // ─── localStorage helpers ───
 const STORAGE_KEY = "quizsharp";
+const VALID_SECTIONS = new Set(Object.values(SECTIONS));
 
 function loadState() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? JSON.parse(raw) : null;
-  } catch { return null; }
+    if (!raw) return null;
+    const data = JSON.parse(raw);
+    if (typeof data !== "object" || data === null) return null;
+    // Validate section is a known value
+    if (data.section && !VALID_SECTIONS.has(data.section)) data.section = SECTIONS.HOME;
+    // Validate simuladoQuestions is an array with expected shape
+    if (data.simuladoQuestions && (
+      !Array.isArray(data.simuladoQuestions) ||
+      data.simuladoQuestions.some(q => !q?.q || !q?.options || q?.answer === undefined)
+    )) {
+      data.simuladoQuestions = [];
+      data.simuladoAnswers = {};
+      data.simuladoFinished = false;
+      data.section = SECTIONS.HOME;
+    }
+    // Validate history is an array
+    if (data.history && !Array.isArray(data.history)) data.history = [];
+    return data;
+  } catch {
+    localStorage.removeItem(STORAGE_KEY);
+    return null;
+  }
 }
 
 function saveState(data) {
@@ -26,12 +47,12 @@ export default function QuizSharp() {
   const saved = loadState();
 
   const [section, setSection] = useState(saved?.section || SECTIONS.HOME);
-  const [currentQ, setCurrentQ] = useState(saved?.currentQ || 0);
+  const [currentQ, setCurrentQ] = useState(Number(saved?.currentQ) || 0);
   const [answers, setAnswers] = useState(saved?.answers || {});
-  const [showResult, setShowResult] = useState(saved?.showResult || false);
+  const [showResult, setShowResult] = useState(saved?.showResult === true);
   const [simuladoQuestions, setSimuladoQuestions] = useState(saved?.simuladoQuestions || []);
   const [simuladoAnswers, setSimuladoAnswers] = useState(saved?.simuladoAnswers || {});
-  const [simuladoFinished, setSimuladoFinished] = useState(saved?.simuladoFinished || false);
+  const [simuladoFinished, setSimuladoFinished] = useState(saved?.simuladoFinished === true);
   const [history, setHistory] = useState(saved?.history || []);
   const containerRef = useRef(null);
 

@@ -3,13 +3,9 @@ import { PS_QUESTIONS, DS_QUESTIONS, CR_QUESTIONS } from "../data/questions";
 
 export default function Home({ learnSections, onNavigate, onStartPractice, onStartSimulado, history = [] }) {
   return (
-    <div style={{ padding: "32px 20px", maxWidth: 700, margin: "0 auto" }}>
+    <div className="home-container fade-in">
       <div style={{ textAlign: "center", marginBottom: 40 }}>
-        <h1 style={{
-          fontSize: 36, fontWeight: 800, margin: 0,
-          background: "linear-gradient(135deg, #00c2ff, #b388ff, #69f0ae)",
-          WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
-        }}>
+        <h1 className="app-title">
           QuizSharp
         </h1>
         <p style={{ color: "#5a7a9a", fontSize: 14, marginTop: 8 }}>
@@ -24,10 +20,9 @@ export default function Home({ learnSections, onNavigate, onStartPractice, onSta
         </h2>
         <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
           {learnSections.map(ls => (
-            <button key={ls.key} onClick={() => onNavigate(ls.key)} style={{
-              background: "#0d1f35", border: "1px solid #1a3a5c", borderRadius: 12,
-              padding: "16px 20px", cursor: "pointer", textAlign: "left",
-              display: "flex", alignItems: "center", gap: 14, transition: "border-color 0.2s",
+            <button key={ls.key} onClick={() => onNavigate(ls.key)} className="btn-card" style={{
+              padding: "16px 20px", textAlign: "left",
+              display: "flex", alignItems: "center", gap: 14,
             }}>
               <span style={{ fontSize: 28 }}>{ls.icon}</span>
               <div>
@@ -44,15 +39,14 @@ export default function Home({ learnSections, onNavigate, onStartPractice, onSta
         <h2 style={{ color: "#e8f0f8", fontSize: 16, fontWeight: 600, marginBottom: 16, letterSpacing: 1 }}>
           🎯 PRATICAR POR TIPO
         </h2>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10 }}>
+        <div className="grid-3">
           {[
             { s: SECTIONS.PRACTICE_PS, label: "Problem Solving", n: PS_QUESTIONS.length, c: "#00c2ff" },
             { s: SECTIONS.PRACTICE_DS, label: "Data Sufficiency", n: DS_QUESTIONS.length, c: "#b388ff" },
             { s: SECTIONS.PRACTICE_CR, label: "Critical Reasoning", n: CR_QUESTIONS.length, c: "#69f0ae" },
           ].map(p => (
-            <button key={p.s} onClick={() => onStartPractice(p.s)} style={{
-              background: "#0d1f35", border: "1px solid #1a3a5c", borderRadius: 12,
-              padding: "20px 12px", cursor: "pointer", textAlign: "center",
+            <button key={p.s} onClick={() => onStartPractice(p.s)} className="btn-card" style={{
+              padding: "20px 12px", textAlign: "center",
             }}>
               <div style={{ color: p.c, fontSize: 24, fontWeight: 800 }}>{p.n}</div>
               <div style={{ color: "#b0c8e0", fontSize: 11, marginTop: 4, lineHeight: 1.4 }}>{p.label}</div>
@@ -62,7 +56,7 @@ export default function Home({ learnSections, onNavigate, onStartPractice, onSta
       </div>
 
       {/* Simulado */}
-      <button onClick={onStartSimulado} style={{
+      <button onClick={onStartSimulado} className="btn-simulado" style={{
         width: "100%", padding: "20px",
         background: "linear-gradient(135deg, #00365c, #1a0a4e, #0a3a2a)",
         border: "1px solid #2a5a8c",
