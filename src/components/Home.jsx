@@ -1,13 +1,10 @@
 import { SECTIONS } from "../constants";
 import { PS_QUESTIONS, DS_QUESTIONS, CR_QUESTIONS } from "../data/questions";
 
-export default function Home({ learnSections, onNavigate, onStartPractice, onStartSimulado }) {
+export default function Home({ learnSections, onNavigate, onStartPractice, onStartSimulado, history = [] }) {
   return (
     <div style={{ padding: "32px 20px", maxWidth: 700, margin: "0 auto" }}>
       <div style={{ textAlign: "center", marginBottom: 40 }}>
-        <div style={{ fontSize: 14, letterSpacing: 4, color: "#5a7a9a", textTransform: "uppercase", marginBottom: 8 }}>
-          Preparatório
-        </div>
         <h1 style={{
           fontSize: 36, fontWeight: 800, margin: 0,
           background: "linear-gradient(135deg, #00c2ff, #b388ff, #69f0ae)",
@@ -16,7 +13,7 @@ export default function Home({ learnSections, onNavigate, onStartPractice, onSta
           QuizSharp
         </h1>
         <p style={{ color: "#5a7a9a", fontSize: 14, marginTop: 8 }}>
-          Estágio QA • Teste de Lógica e Argumentação
+          Pratique, aprenda e domine qualquer assunto
         </p>
       </div>
 
@@ -78,6 +75,33 @@ export default function Home({ learnSections, onNavigate, onStartPractice, onSta
           15 questões • 2 horas • Cronometrado • Sem gabarito durante
         </div>
       </button>
+
+      {/* Histórico */}
+      {history.length > 0 && (
+        <div style={{ marginTop: 32 }}>
+          <h2 style={{ color: "#e8f0f8", fontSize: 16, fontWeight: 600, marginBottom: 16, letterSpacing: 1 }}>
+            📈 HISTÓRICO
+          </h2>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {history.slice().reverse().map((h, i) => (
+              <div key={i} style={{
+                background: "#0d1f35", border: "1px solid #1a3a5c", borderRadius: 10,
+                padding: "12px 16px", display: "flex", justifyContent: "space-between", alignItems: "center",
+              }}>
+                <span style={{ color: "#5a7a9a", fontSize: 13 }}>
+                  {new Date(h.date).toLocaleDateString("pt-BR")}
+                </span>
+                <span style={{
+                  fontSize: 15, fontWeight: 700,
+                  color: h.pct >= 70 ? "#69f0ae" : h.pct >= 40 ? "#ffd740" : "#ff6666",
+                }}>
+                  {h.correct}/{h.total} ({h.pct}%)
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

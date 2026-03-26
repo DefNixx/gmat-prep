@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { SECTIONS } from "./constants";
 import { SIMULADO_QUESTIONS, shuffle } from "./data/questions";
 import { learnSections } from "./data/learnContent";
@@ -8,15 +8,37 @@ import Practice from "./components/Practice";
 import Simulado from "./components/Simulado";
 import Results from "./components/Results";
 
-export default function GMATPrep() {
-  const [section, setSection] = useState(SECTIONS.HOME);
-  const [currentQ, setCurrentQ] = useState(0);
-  const [answers, setAnswers] = useState({});
-  const [showResult, setShowResult] = useState(false);
-  const [simuladoQuestions, setSimuladoQuestions] = useState([]);
-  const [simuladoAnswers, setSimuladoAnswers] = useState({});
-  const [simuladoFinished, setSimuladoFinished] = useState(false);
+// ─── localStorage helpers ───
+const STORAGE_KEY = "quizsharp";
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch { return null; }
+}
+
+function saveState(data) {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch {}
+}
+
+export default function QuizSharp() {
+  const saved = loadState();
+
+  const [section, setSection] = useState(saved?.section || SECTIONS.HOME);
+  const [currentQ, setCurrentQ] = useState(saved?.currentQ || 0);
+  const [answers, setAnswers] = useState(saved?.answers || {});
+  const [showResult, setShowResult] = useState(saved?.showResult || false);
+  const [simuladoQuestions, setSimuladoQuestions] = useState(saved?.simuladoQuestions || []);
+  const [simuladoAnswers, setSimuladoAnswers] = useState(saved?.simuladoAnswers || {});
+  const [simuladoFinished, setSimuladoFinished] = useState(saved?.simuladoFinished || false);
+  const [history, setHistory] = useState(saved?.history || []);
   const containerRef = useRef(null);
+
+  // Persist state on every change
+  useEffect(() => {
+    saveState({ section, currentQ, answers, showResult, simuladoQuestions, simuladoAnswers, simuladoFinished, history });
+  }, [section, currentQ, answers, showResult, simuladoQuestions, simuladoAnswers, simuladoFinished, history]);
 
   const scrollToTop = () => {
     if (containerRef.current) containerRef.current.scrollTop = 0;
@@ -29,6 +51,22 @@ export default function GMATPrep() {
     setSimuladoFinished(false);
     setSection(SECTIONS.SIMULADO);
   };
+
+  const finishSimulado = useCallback(() => {
+    setSimuladoFinished(true);
+    // Save result to history
+    const total = simuladoQuestions.length;
+    let correct = 0;
+    simuladoQuestions.forEach((q, i) => {
+      if (simuladoAnswers[i] === q.answer) correct++;
+    });
+    setHistory(prev => [...prev, {
+      date: new Date().toISOString(),
+      total,
+      correct,
+      pct: Math.round((correct / total) * 100),
+    }]);
+  }, [simuladoQuestions, simuladoAnswers]);
 
   const startPractice = (sec) => {
     setCurrentQ(0);
@@ -62,6 +100,7 @@ export default function GMATPrep() {
           onNavigate={navigateAndScroll}
           onStartPractice={startPractice}
           onStartSimulado={startSimulado}
+          history={history}
         />
       )}
       {learnMatch && (
@@ -92,7 +131,7 @@ export default function GMATPrep() {
           simuladoAnswers={simuladoAnswers}
           onSelectAnswer={(i) => setSimuladoAnswers({ ...simuladoAnswers, [currentQ]: i })}
           onSetCurrentQ={setCurrentQ}
-          onFinish={() => setSimuladoFinished(true)}
+          onFinish={finishSimulado}
           scrollToTop={scrollToTop}
         />
       )}

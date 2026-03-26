@@ -12,7 +12,7 @@ export const learnSections = [
   {
     key: SECTIONS.LEARN_DS, title: "Data Sufficiency", color: "#b388ff", icon: "📊",
     content: [
-      { h: "O que é?", p: "O formato MAIS DIFERENTE do GMAT. Você recebe uma pergunta e duas afirmações. NÃO precisa resolver o problema — só precisa dizer se as informações são suficientes pra resolvê-lo." },
+      { h: "O que é?", p: "O formato mais diferente de prova. Você recebe uma pergunta e duas afirmações. NÃO precisa resolver o problema — só precisa dizer se as informações são suficientes pra resolvê-lo." },
       { h: "As 5 alternativas (SEMPRE as mesmas!)", p: "(A) Afirmação 1 sozinha é suficiente, mas a 2 sozinha NÃO é\n(B) Afirmação 2 sozinha é suficiente, mas a 1 sozinha NÃO é\n(C) Nenhuma sozinha basta, mas as duas JUNTAS são suficientes\n(D) CADA UMA sozinha já é suficiente\n(E) Mesmo as duas JUNTAS ainda NÃO são suficientes" },
       { h: "MEMORIZE ISTO", p: "As alternativas acima são FIXAS em TODA questão de DS. Se você decorar isso antes da prova, economiza tempo precioso. Na hora da prova, você já sabe as opções e foca no raciocínio." },
       { h: "Método de resolução", p: "1) Analise a afirmação (1) SOZINHA → suficiente ou não?\n2) Analise a afirmação (2) SOZINHA → suficiente ou não?\n3) Se nenhuma sozinha bastou, analise as DUAS JUNTAS.\n\nDica crucial: 'suficiente' significa que você chega a UM ÚNICO valor/resposta. Se a afirmação permite 2 ou mais respostas, é INSUFICIENTE." },
